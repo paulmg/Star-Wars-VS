@@ -1,0 +1,18 @@
+{
+  "name": "migration",
+  "version": "1.0.0",
+  "description": "Export SWAPI data mixed with Wookiepedia image saved as json to a Graphcool project",
+  "scripts": {
+    "export": "node --harmony-async-await exportToGraphCool.js",
+    "import": "node --harmony-async-await importSwapiData.js",
+    "connections": "node --harmony-async-await connectMutations.js"
+  },
+  "author": "Paul Graffam",
+  "license": "ISC",
+  "dependencies": {
+    "jsonfile": "^2.4.0",
+    "lodash": "^4.17.2",
+    "lokka": "^1.7.0",
+    "lokka-transport-http": "^1.6.1"
+  }
+}

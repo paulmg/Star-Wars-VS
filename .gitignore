@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+config.js
+.tmp
+.idea
+public
+deploy
+compiled
+backup
+.swp
+.vscode
