@@ -17,8 +17,8 @@ const Entries = ({ leftEntry, rightEntry, onVote, canVote }) => {
 };
 
 Entries.propTypes = {
-  leftEntry: React.PropTypes.object.isRequired,
-  rightEntry: React.PropTypes.object.isRequired,
+  leftEntry: propType(VoteEntry.fragments.entry).isRequired,
+  rightEntry: propType(VoteEntry.fragments.entry).isRequired,
   onVote: React.PropTypes.func.isRequired,
   canVote: React.PropTypes.bool.isRequired
 };
