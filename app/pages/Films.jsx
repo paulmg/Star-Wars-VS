@@ -2,6 +2,7 @@ import React from 'react';
 
 import Page from './Page';
 import VoteFilmEntries from '../containers/VoteFilmEntries';
+import Rankings from '../containers/Ranking';
 
 class FilmsPage extends React.Component {
   static getMetaData() {
@@ -18,6 +19,9 @@ class FilmsPage extends React.Component {
     return (
       <Page {...FilmsPage.getMetaData()}>
         <VoteFilmEntries {...this.props} />
+        <Rankings {...this.props} order={"winsDaily_DESC"} />
+        <Rankings {...this.props} order={"winsWeekly_DESC"} />
+        <Rankings {...this.props} order={"wins_DESC"} />
       </Page>
     );
   }

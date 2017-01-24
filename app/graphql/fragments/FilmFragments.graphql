@@ -1,0 +1,16 @@
+fragment FilmEntry on Film {
+  id
+  director
+  episodeId
+  imageURL
+  losses
+  lossesDaily
+  lossesWeekly
+  producers
+  ranking
+  releaseDate
+  title
+  wins
+  winsDaily
+  winsWeekly
+}

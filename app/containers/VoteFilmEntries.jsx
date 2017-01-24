@@ -1,13 +1,14 @@
 import React from 'react';
-import { graphql, compose } from 'react-apollo';
-import update from 'immutability-helper';
+import { graphql } from 'react-apollo';
+// import update from 'immutability-helper';
 import { propType } from 'graphql-anywhere';
 
 import Loading from '../components/Loading';
 import Entries from '../components/Entries';
 import VoteEntry from '../components/VoteEntry';
-import FILMS_QUERY from '../graphql/FilmsQuery.graphql';
-import VOTE_MUTATION from '../graphql/Vote.graphql';
+
+import FILMS_QUERY from '../graphql/queries/FilmQuery.graphql';
+import VOTE_MUTATION from '../graphql/mutations/VoteMutation.graphql';
 
 import { getRandom } from '../utils/helpers';
 
@@ -46,8 +47,6 @@ class VoteFilmEntries extends React.Component {
       rightIndex = getRandom(len);
     }
 
-    console.log(leftIndex, rightIndex)
-
     return { leftIndex, rightIndex };
   }
 
@@ -68,8 +67,24 @@ class VoteFilmEntries extends React.Component {
     const winner = leftEntry.id === id ? leftEntry : rightEntry;
     const loser = leftEntry.id !== id ? leftEntry : rightEntry;
 
-    return vote({ id: winner.id, wins: winner.wins + 1, losses: winner.losses }).then(() => {
-      vote({ id: loser.id, wins: loser.wins, losses: loser.losses + 1}).then((res) => {
+    return vote({
+      id: winner.id,
+      wins: winner.wins + 1,
+      winsDaily: winner.winsDaily + 1,
+      winsWeekly: winner.winsWeekly + 1,
+      losses: winner.losses,
+      lossesDaily: winner.lossesDaily,
+      lossesWeekly: winner.lossesWeekly
+    }).then(() => {
+      vote({
+        id: loser.id,
+        wins: loser.wins,
+        winsDaily: loser.winsDaily,
+        winsWeekly: loser.winsWeekly,
+        losses: loser.losses + 1,
+        lossesDaily: winner.lossesDaily + 1,
+        lossesWeekly: winner.lossesWeekly + 1
+      }).then((res) => {
         const { allFilms, leftIndex, rightIndex } = this.getNewEntries();
 
         this.setState({ leftEntry: allFilms[leftIndex], rightEntry: allFilms[rightIndex], canVote: true });
@@ -107,9 +122,6 @@ VoteFilmEntries.propTypes = {
 
 const withData = graphql(FILMS_QUERY, {
   options: {
-    variables: {
-      first: 10
-    },
     forceFetch: true
   },
   props: ({ data: { loading, allFilms } }) => ({
@@ -120,8 +132,8 @@ const withData = graphql(FILMS_QUERY, {
 
 const withMutations = graphql(VOTE_MUTATION, {
   props: ({ ownProps, mutate }) => ({
-    vote: ({ id, wins, losses }) => mutate({
-      variables: { id, wins, losses },
+    vote: ({ id, wins, losses, winsDaily, winsWeekly, lossesDaily, lossesWeekly }) => mutate({
+      variables: { id, wins, losses, winsDaily, winsWeekly, lossesDaily, lossesWeekly },
       // updateQueries: {
       //   allFilms: (prev, {mutationResult}) => {
       //     const updatedFilm = mutationResult.data.updateFilm;

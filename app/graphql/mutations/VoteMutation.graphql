@@ -1,0 +1,7 @@
+mutation vote($id: ID!, $wins: Int!, $losses: Int!, $winsDaily: Int!, $winsWeekly: Int!, $lossesDaily: Int!, $lossesWeekly: Int!) {
+  updateFilm(id: $id, wins: $wins, losses: $losses, winsDaily: $winsDaily, winsWeekly: $winsWeekly, lossesDaily: $lossesDaily, lossesWeekly: $lossesWeekly) {
+    title
+    wins
+    losses
+  }
+}

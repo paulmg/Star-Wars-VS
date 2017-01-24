@@ -1,0 +1,4 @@
+fragment PersonEntry on Person {
+  id
+  name
+}
