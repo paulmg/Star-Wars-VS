@@ -1,0 +1,7 @@
+#import "../fragments/FilmFragments.graphql"
+
+query FilmRankings($first: Int!, $order: FilmOrderBy!, $skip: Int!) {
+  allFilms(filter: {imageURL_not: ""}, orderBy: $order, first: $first, skip: $skip) {
+    ...FilmEntry
+  }
+}

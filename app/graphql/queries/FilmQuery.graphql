@@ -1,0 +1,7 @@
+#import "../fragments/FilmFragments.graphql"
+
+query {
+  allFilms(filter: {imageURL_not: ""}) {
+    ...FilmEntry
+  }
+}
