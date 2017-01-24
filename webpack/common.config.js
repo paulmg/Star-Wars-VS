@@ -1,15 +1,14 @@
 var path = require('path');
 var fs = require('fs');
 
-var externalNodeModules =
-      fs.readdirSync('node_modules')
-        .filter(function(x) {
-          return ['.bin'].indexOf(x) === -1;
-        })
-        .reduce(function(acc, cur) {
-          acc[cur] = 'commonjs ' + cur;
-          return acc;
-        }, {});
+var externalNodeModules = fs.readdirSync('node_modules')
+                            .filter(function(x) {
+                              return ['.bin'].indexOf(x) === -1;
+                            })
+                            .reduce(function(acc, cur) {
+                              acc[cur] = 'commonjs ' + cur;
+                              return acc;
+                            }, {});
 
 module.exports = {
   output: {

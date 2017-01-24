@@ -21,10 +21,12 @@ app.use((req, res) => {
   match({ routes, location: req.originalUrl }, (error, redirect, props) => {
     if(redirect) {
       res.redirect(redirect.pathname + redirect.search);
-    } else if(error) {
+    }
+    else if(error) {
       console.error('ROUTER ERROR:', error); // eslint-disable-line no-console
       res.status(500).json(error);
-    } else if(props) {
+    }
+    else if(props) {
       const client = new ApolloClient({
         queryTransformer: addTypename,
         ssrMode: true,
@@ -33,7 +35,7 @@ app.use((req, res) => {
 
         }),
         dataIdFromObject: (result) => {
-          if (result.id && result.__typename) { // eslint-disable-line no-underscore-dangle
+          if(result.id && result.__typename) { // eslint-disable-line no-underscore-dangle
             return result.__typename + result.id; // eslint-disable-line no-underscore-dangle
           }
           return null;
@@ -68,7 +70,8 @@ app.use((req, res) => {
         console.error('RENDERING ERROR:', err);
         res.status(500).json(err);
       });
-    } else {
+    }
+    else {
       res.status(404).send('Not found');
     }
   });
