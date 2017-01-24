@@ -1,20 +1,20 @@
 const _ = require('lodash');
+const async = require('async');
 const { Lokka } = require('lokka');
 const { Transport } = require('lokka-transport-http');
-const jsonfile = require('jsonfile');
 
 const config = require('./config');
 
 const token = config.graphCool.token;
 const headers = { Authorization: `Bearer ${token}` };
 
-const types = {
-  people: 'people',
-  starship: 'starships',
-  vehicle: 'vehicles',
-  species: 'species',
-  planet: 'planets',
-  film: 'films'
+const models = {
+  person: 'Persons',
+  starship: 'Starships',
+  vehicle: 'Vehicles',
+  species: 'Species',
+  planet: 'Planets',
+  film: 'Films'
 };
 
 const client = new Lokka({
@@ -24,39 +24,40 @@ const client = new Lokka({
 // Set timezone to UTC (needed for Graphcool)
 process.env.TZ = 'UTC';
 
-const connectMutation = (newDataId, newTypeId, connectionType) => (
-  client.mutate(`{
-    addTo${connectionType.model + connectionType.connectionModel}(${connectionType.connectionPlural + connectionType.connectionModel}Id: "${newTypeId}" ${connectionType.plural + connectionType.model}Id: "${newDataId}") {
-      ${connectionType.plural + connectionType.model} {
-        id
-      }
+// Query action
+const queryAll = model => (
+  client.query(`{
+    all${model} {
+      id
     }
   }`)
 );
 
-const queryAll = () => (
-  client.query(`{
-    allFilms {
+// Update the daily wins
+const updateMutation = (newDataId, newTypeId, connectionType) => (
+  client.mutate(`{
+    updateResource: update${connectionType.model}(
+      id: "${newTypeId}", 
+      winsDaily: 0, 
+      lossesDaily: 0
+    ) {
       id
-      losesDaily
-      winsDaily
     }
   }`)
-)
+);
+
 
 const main = () => {
-  // Query all resource types
-  for(const typeProp in types) {
-    if(types.hasOwnProperty(typeProp)) {
+  // Query all resource models
+  Object.values(models).forEach((model) => {
+    const allIds = queryAll(model);
+  })
 
-    }
-  }
-
-  // Get each resource id, daily wins
+  // Get each resource id, winsDaily
 
   // Tally wins and losses for each
 
-  // Clear and add new resources to daily relationship
+  // Clear and add new resources to daily relationship (grab all daily ids and remove?)
 
   //
 
