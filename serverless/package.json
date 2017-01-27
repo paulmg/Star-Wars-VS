@@ -10,7 +10,7 @@
     "test": "mocha --compilers js:babel-core/register --recursive tests/"
   },
   "dependencies": {
-    "async": "^2.1.4",
+    "bluebird": "^3.4.7",
     "lodash": "^4.17.2",
     "lokka": "^1.7.0",
     "lokka-transport-http": "^1.6.1"
