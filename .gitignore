@@ -4,6 +4,7 @@ config.js
 .tmp
 .idea
 public
+dist
 deploy
 compiled
 backup
