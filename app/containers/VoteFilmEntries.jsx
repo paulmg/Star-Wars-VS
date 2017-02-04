@@ -1,6 +1,7 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
-// import update from 'immutability-helper';
+import { graphql, compose } from 'react-apollo';
+import { connect } from 'react-redux';
+import update from 'immutability-helper';
 import { propType } from 'graphql-anywhere';
 
 import Loading from '../components/Loading';
@@ -10,7 +11,7 @@ import VoteEntry from '../components/VoteEntry';
 import FILMS_QUERY from '../graphql/queries/FilmQuery.graphql';
 import VOTE_MUTATION from '../graphql/mutations/VoteMutation.graphql';
 
-import { getRandom } from '../utils/helpers';
+import { getLeftRightIndexes } from '../utils/helpers';
 
 class VoteFilmEntries extends React.Component {
   constructor() {
@@ -39,20 +40,9 @@ class VoteFilmEntries extends React.Component {
     console.log('will receive props');
   }
 
-  getLeftRightIndexes(len) {
-    const leftIndex = getRandom(len);
-    let rightIndex = getRandom(len);
-
-    while(rightIndex === leftIndex) {
-      rightIndex = getRandom(len);
-    }
-
-    return { leftIndex, rightIndex };
-  }
-
   getNewEntries() {
     const { allFilms } = this.props;
-    const { leftIndex, rightIndex } = this.getLeftRightIndexes(allFilms.length);
+    const { leftIndex, rightIndex } = getLeftRightIndexes(allFilms.length);
 
     return { allFilms, leftIndex, rightIndex };
   }
@@ -65,7 +55,7 @@ class VoteFilmEntries extends React.Component {
     console.log('vote event');
 
     const winner = leftEntry.id === id ? leftEntry : rightEntry;
-    const loser = leftEntry.id !== id ? leftEntry : rightEntry;
+    const loser = leftEntry.id === id ? rightEntry : leftEntry;
 
     return vote({
       id: winner.id,
@@ -148,4 +138,22 @@ const withMutations = graphql(VOTE_MUTATION, {
   })
 });
 
-export default withMutations(withData(VoteFilmEntries));
+function mapStateToProps(state) {
+  return {
+    leftEntry: state.leftEntry,
+    rightEntry: state.rightEntry,
+    canVote: state.canVote
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+
+  };
+}
+
+export default compose(
+  withMutations,
+  withData,
+  connect(mapStateToProps)
+)(VoteFilmEntries);

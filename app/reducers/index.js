@@ -2,26 +2,14 @@ import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
 
 import topic from './topic';
-import * as types from '../constants';
-
-const isFetching = (state = false, action) => {
-  switch(action.type) {
-    case types.CREATE_REQUEST:
-      return true;
-    case types.REQUEST_SUCCESS:
-    case types.REQUEST_FAILURE:
-      return false;
-
-    default:
-      return state;
-  }
-};
+import isFetching from './fetching';
 
 // Combine reducers with routeReducer which keeps track of router state
-const rootReducer = combineReducers({
-  isFetching,
-  topic,
-  routing
-});
-
-export default rootReducer;
+export default function createRootReducer(client) {
+  return combineReducers({
+    isFetching,
+    topic,
+    routing,
+    apollo: client.reducer()
+  });
+}

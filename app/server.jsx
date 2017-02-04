@@ -4,9 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
 import { ApolloProvider, renderToStringWithData } from 'react-apollo';
-import { match, RouterContext } from 'react-router';
+import { match, browserHistory, RouterContext } from 'react-router';
 import 'isomorphic-fetch';
 
+import configureStore from './store';
 import routes from './routes';
 import Html from './pages/Html';
 import config from './config';
@@ -21,36 +22,35 @@ app.use((req, res) => {
   match({ routes, location: req.originalUrl }, (error, redirect, props) => {
     if(redirect) {
       res.redirect(redirect.pathname + redirect.search);
-    }
-    else if(error) {
+    } else if(error) {
       console.error('ROUTER ERROR:', error); // eslint-disable-line no-console
       res.status(500).json(error);
-    }
-    else if(props) {
+    } else if(props) {
       const client = new ApolloClient({
         queryTransformer: addTypename,
         ssrMode: true,
         networkInterface: createNetworkInterface({
-          uri: apiUrl,
-
+          uri: apiUrl
         }),
         dataIdFromObject: (result) => {
           if(result.id && result.__typename) { // eslint-disable-line no-underscore-dangle
             return result.__typename + result.id; // eslint-disable-line no-underscore-dangle
           }
           return null;
-        },
+        }
       });
 
+      const store = configureStore(client, {}, browserHistory);
+
       const component = (
-        <ApolloProvider client={client}>
+        <ApolloProvider client={client} store={store}>
           <RouterContext {...props} />
         </ApolloProvider>
       );
 
       renderToStringWithData(component).then((content) => {
         const data = client.store.getState().apollo.data;
-        // res.status(200);
+        res.status(200);
 
         const html = (
           <Html

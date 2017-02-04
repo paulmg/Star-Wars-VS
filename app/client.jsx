@@ -29,7 +29,7 @@ const client = new ApolloClient({
   }),
   queryTransformer: addTypename,
   dataIdFromObject: (result) => {
-    if (result.id && result.__typename) { // eslint-disable-line no-underscore-dangle
+    if(result.id && result.__typename) { // eslint-disable-line no-underscore-dangle
       return result.__typename + result.id; // eslint-disable-line no-underscore-dangle
     }
     return null;
@@ -38,21 +38,20 @@ const client = new ApolloClient({
   ssrForceFetchDelay: 100
 });
 
-// const store = configureStore(initialState, browserHistory);
-// const history = syncHistoryWithStore(browserHistory, store);
-// const routes = createRoutes();
+const store = configureStore(client, initialState, browserHistory);
+const history = syncHistoryWithStore(browserHistory, store);
 
-// function onUpdate() {
-//   store.dispatch({ type: types.CREATE_REQUEST });
-//   preRenderMiddleware(this.state)
-//     .then((data) => {
-//       return store.dispatch({ type: types.REQUEST_SUCCESS, data });
-//     });
-// }
+function onUpdate() {
+  store.dispatch({ type: types.CREATE_REQUEST });
+  preRenderMiddleware(this.state)
+    .then((data) => {
+      return store.dispatch({ type: types.REQUEST_SUCCESS, data });
+    });
+}
 
 render((
-  <ApolloProvider client={client}>
-    <Router history={browserHistory}>
+  <ApolloProvider client={client} store={store}>
+    <Router history={history} onUpdate={onUpdate}>
       {routes}
     </Router>
   </ApolloProvider>),

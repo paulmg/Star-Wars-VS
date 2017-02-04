@@ -1,4 +1,4 @@
-export function shuffle(array) {
+export const shuffle = (array) => {
   const newArr = array.slice();
   let currentIndex = newArr.length;
   let temporaryValue;
@@ -17,6 +17,17 @@ export function shuffle(array) {
   }
 
   return newArr;
-}
+};
 
-export function getRandom(len) { return Math.floor(Math.random() * len); }
+export const getRandom = (len) => { return Math.floor(Math.random() * len); };
+
+export const getLeftRightIndexes = (len) => {
+  const leftIndex = getRandom(len);
+  let rightIndex = getRandom(len);
+
+  while(rightIndex === leftIndex) {
+    rightIndex = getRandom(len);
+  }
+
+  return { leftIndex, rightIndex };
+};

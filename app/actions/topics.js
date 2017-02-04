@@ -33,7 +33,7 @@ export function incrementCount(id) {
       isIncrement: true
     })
       .then(() => dispatch(increment(id)))
-      .catch(() => dispatch(createTopicFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
+      .catch(() => dispatch(createTopicFailure({ id, error: 'Oops! Something went wrong and we couldn\'t add your vote' })));
   };
 }
 
@@ -44,7 +44,7 @@ export function decrementCount(id) {
       isIncrement: false
     })
       .then(() => dispatch(decrement(id)))
-      .catch(() => dispatch(createTopicFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
+      .catch(() => dispatch(createTopicFailure({ id, error: 'Oops! Something went wrong and we couldn\'t add your vote' })));
   };
 }
 
@@ -52,7 +52,9 @@ export function destroyTopic(id) {
   return (dispatch) => {
     return makeTopicRequest('delete', id)
       .then(() => dispatch(destroy(id)))
-      .catch(() => dispatch(createTopicFailure({id,
-        error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
+      .catch(() => dispatch(createTopicFailure({
+        id,
+        error: 'Oops! Something went wrong and we couldn\'t add your vote'
+      })));
   };
 }
