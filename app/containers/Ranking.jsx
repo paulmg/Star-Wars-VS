@@ -1,8 +1,10 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
+import update from 'immutability-helper';
 
 import Loading from '../components/Loading';
 import RankingEntries from '../components/RankingEntries';
+
 import FILM_RANKING_QUERY from '../graphql/queries/FilmRankingQuery.graphql';
 
 class Ranking extends React.Component {
@@ -29,15 +31,16 @@ class Ranking extends React.Component {
 Ranking.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   allFilms: RankingEntries.propTypes.entries,
-  fetchMore: React.PropTypes.func
+  fetchMore: React.PropTypes.func,
+  order: React.PropTypes.string
 };
 
 const withData = graphql(FILM_RANKING_QUERY, {
-  options: props => ({
+  options: ownProps => ({
     variables: {
       first: 5,
       skip: 0,
-      order: props.order || 'wins_DESC'
+      order: ownProps.order || 'wins_DESC'
     },
     forceFetch: true
   }),
@@ -51,10 +54,13 @@ const withData = graphql(FILM_RANKING_QUERY, {
       updateQuery: (prev, { fetchMoreResult }) => {
         console.log(allFilms.length, fetchMoreResult)
         if(!fetchMoreResult.data) {
+          // todo: remove button
           return prev;
         }
-        return Object.assign({}, prev, {
-          allFilms: [...prev.allFilms, ...fetchMoreResult.data.allFilms]
+        return update(prev, {
+          allFilms: {
+            $set: [...prev.allFilms, ...fetchMoreResult.data.allFilms]
+          }
         });
       }
     })
