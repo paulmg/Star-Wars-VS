@@ -1,4 +1,4 @@
-#import "../fragments/QueryFragments.graphql"
+#import "../fragments/PersonFragments.graphql"
 
 query {
   allPersons(filter: {imageURL_not: ""}) {
