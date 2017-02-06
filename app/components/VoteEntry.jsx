@@ -1,10 +1,11 @@
 import React from 'react';
-import gql from 'graphql-tag';
 import { propType } from 'graphql-anywhere';
+
+import FilmEntry from '../graphql/fragments/FilmFragments.graphql';
 
 const VoteEntry = ({ onVote, entry, alignment, canVote }) => {
   function submitVote() {
-    onVote({ id: entry.id, wins: entry.wins + 1, losses: entry.losses });
+    onVote({ id: entry.id });
   }
 
   return (
@@ -15,19 +16,7 @@ const VoteEntry = ({ onVote, entry, alignment, canVote }) => {
 };
 
 VoteEntry.fragments = {
-  entry: gql`
-    fragment VoteEntry on Film {
-      id
-      director
-      episodeId
-      imageURL
-      losses
-      producers
-      releaseDate
-      title
-      wins
-    }
-  `,
+  entry: FilmEntry
 };
 
 VoteEntry.propTypes = {
