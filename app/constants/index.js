@@ -1,8 +1,8 @@
+// Request
 export const CREATE_REQUEST = 'CREATE_REQUEST';
 export const REQUEST_SUCCESS = 'REQUEST_SUCCESS';
 export const REQUEST_FAILURE = 'REQUEST_FAILURE';
 
-export const INCREMENT_COUNT = 'INCREMENT_COUNT';
-export const DECREMENT_COUNT = 'DECREMENT_COUNT';
-export const CAN_VOTE = 'CAN_VOTE';
+// Entries
 export const SET_LEFT_RIGHT_ENTRIES = 'SET_LEFT_RIGHT_ENTRIES';
+export const CAN_VOTE = 'CAN_VOTE';
